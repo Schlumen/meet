@@ -1,8 +1,9 @@
 # Meet App
 This app will allow users to search for a city and get a list of events hosted in that city.
 This app was developed to build a serverless, progressive web application (PWA) with React using a
-test-driven development (TDD) technique. The application uses the Google
-Calendar API to fetch upcoming events.
+test-driven development (TDD) technique. The application uses the Google Calendar API to fetch upcoming events.
+## Serverless
+This app uses a serverless function deployed on Amazon AWS Lambda to authorize (OAuth 2.0) the user to make requests to the Google Calender API to search for upcoming events.
 ## Used technologies
 - React
 - JavaScript
