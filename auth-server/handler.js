@@ -12,7 +12,7 @@ const credentials = {
     token_uri: "https://oauth2.googleapis.com/token",
     auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
     redirect_uris: ["https://schlumen.github.io/meet/"],
-    javascript_origins: ["https://schlumen.github.io", "http://localhost:3000"],
+    javascript_origins: ["https://schlumen.github.io", "http://localhost:3000"]
 };
 const { client_secret, client_id, redirect_uris, calendar_id } = credentials;
 const oAuth2Client = new google.auth.OAuth2(
@@ -24,7 +24,7 @@ const oAuth2Client = new google.auth.OAuth2(
 module.exports.getAuthURL = async () => {
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: "offline",
-        scope: SCOPES,
+        scope: SCOPES
     });
 
     return {
@@ -34,7 +34,7 @@ module.exports.getAuthURL = async () => {
             "Access-Control-Allow-Credentials": true,
         },
         body: JSON.stringify({
-            authUrl: authUrl,
+            authUrl: authUrl
         }),
     };
 };
@@ -58,14 +58,51 @@ module.exports.getAccessToken = async (event) => {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Credentials': true,
             },
-            body: JSON.stringify(token),
+            body: JSON.stringify(token)
         };
     }).catch((err) => {
         // Handle error
         console.error(err);
         return {
             statusCode: 500,
-            body: JSON.stringify(err),
+            body: JSON.stringify(err)
         };
     });
 };
+
+module.exports.getCalendarEvents = async (event) => {
+    const access_token = decodeURIComponent(`${event.pathParameters.access_token}`);
+    oAuth2Client.setCredentials({ access_token });
+    return new Promise((resolve, reject) => {
+        calendar.events.list({
+            calendarId: calendar_id,
+            auth: oAuth2Client,
+            timeMin: new Date().toISOString(),
+            singleEvents: true,
+            orderBy: "startTime",
+        }, (error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    }).then((results) => {
+        // Respond with calendar events
+        return {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify({ events: results.data.items })
+        };
+    }).catch((err) => {
+        // Handle error
+        console.error(err);
+        return {
+            statusCode: 500,
+            body: JSON.stringify(err)
+        };
+    });
+}
