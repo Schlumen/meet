@@ -9,13 +9,16 @@ import "./App.css";
 class App extends Component {
     state = {
         events: [],
-        locations: []
+        locations: [],
+        numberOfEvents: 32,
+        location: "all"
     }
 
     componentDidMount() {
         this.mounted = true;
         getEvents().then((events) => {
             if (this.mounted) {
+                events = events.slice(0, 32);
                 this.setState({ events, locations: extractLocations(events) });
             }
         });
@@ -25,13 +28,15 @@ class App extends Component {
         this.mounted = false;
     }
 
-    updateEvents = (location) => {
+    updateEvents = (location, eventCount) => {
+        if (location) this.setState({ location });
+        if (eventCount) this.setState({ numberOfEvents: eventCount });
         getEvents().then((events) => {
-            const locationEvents = (location === "all") ?
+            const locationEvents = (this.state.location === "all") ?
                 events :
-                events.filter((event) => event.location === location);
+                events.filter((event) => event.location === this.state.location);
             this.setState({
-                events: locationEvents
+                events: locationEvents.slice(0, this.state.numberOfEvents)
             });
         });
     }
@@ -40,7 +45,7 @@ class App extends Component {
         return (
             <div className="App" >
                 <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
-                <NumberOfEvents />
+                <NumberOfEvents updateEvents={this.updateEvents} />
                 <EventList events={this.state.events} />
             </div>
         );

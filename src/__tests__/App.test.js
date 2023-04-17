@@ -67,4 +67,17 @@ describe('<App /> integration', () => {
         expect(AppWrapper.state('events')).toEqual(allEvents);
         AppWrapper.unmount();
     });
+
+    test("number of rendered events equals number of events specified", async () => {
+        const AppWrapper = mount(<App />);
+        const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
+        const EventListWrapper = AppWrapper.find(EventList);
+        const eventCount = Math.floor(Math.random() * 3);
+        const allEvents = await getEvents();
+        const cutEvents = allEvents.slice(0, eventCount);
+        await NumberOfEventsWrapper.find(".nrOfEvents").simulate("change", { target: { value: eventCount } });
+        expect(AppWrapper.state("events")).toEqual(allEvents);
+        expect(EventListWrapper.find(Event)).toHaveLength(cutEvents.length);
+        AppWrapper.unmount();
+    });
 });

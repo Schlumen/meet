@@ -5,8 +5,9 @@ class NumberOfEvents extends Component {
         query: 32
     }
 
-    handleChange = (event) => {
-        this.setState({ query: event.target.value });
+    handleChange = async (event) => {
+        await this.setState({ query: event.target.value });
+        this.props.updateEvents(null, this.state.query);
     }
 
     render() {
