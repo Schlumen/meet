@@ -68,16 +68,26 @@ describe('<App /> integration', () => {
         AppWrapper.unmount();
     });
 
-    test("number of rendered events equals number of events specified", async () => {
+    test("number of events state equals number of events specified", async () => {
         const AppWrapper = mount(<App />);
         const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
-        const EventListWrapper = AppWrapper.find(EventList);
-        const eventCount = Math.floor(Math.random() * 3);
+        const eventCount = Math.floor(1 + Math.random() * 2);
         const allEvents = await getEvents();
         const cutEvents = allEvents.slice(0, eventCount);
         await NumberOfEventsWrapper.find(".nrOfEvents").simulate("change", { target: { value: eventCount } });
-        expect(AppWrapper.state("events")).toEqual(allEvents);
-        expect(EventListWrapper.find(Event)).toHaveLength(cutEvents.length);
+        expect(AppWrapper.state("events")).toEqual(cutEvents);
+        expect(AppWrapper.state("numberOfEvents")).toEqual(eventCount);
+        AppWrapper.unmount();
+    });
+
+    test("renders correct number of events", async () => {
+        const AppWrapper = mount(<App />);
+        const NumberOfEventsWrapper = AppWrapper.find(NumberOfEvents);
+        const eventCount = Math.floor(1 + Math.random() * 2);
+        const event = { target: { value: eventCount } };
+        await NumberOfEventsWrapper.instance().handleChange(event);
+        AppWrapper.update();
+        expect(AppWrapper.find(EventList).find("li")).toHaveLength(eventCount);
         AppWrapper.unmount();
     });
 });
