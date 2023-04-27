@@ -3,6 +3,7 @@ import EventList from "./EventList";
 import CitySearch from "./CitySearch";
 import NumberOfEvents from "./NumberOfEvents";
 import { getEvents, extractLocations } from "./api";
+import { WarningAlert } from "./Alert";
 import "./nprogress.css";
 import "./App.css";
 
@@ -48,6 +49,7 @@ class App extends Component {
                 <p>Choose your nearest city</p>
                 <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
                 <NumberOfEvents updateEvents={this.updateEvents} />
+                {!navigator.onLine ? <WarningAlert text={"You are offline, the displayed list has been loaded from the cache"} /> : null}
                 <EventList events={this.state.events} />
             </div>
         );
