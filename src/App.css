@@ -98,8 +98,15 @@ input[type="number"] {
 .data-vis-wrapper {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .scatter {
     flex-grow: 1;
-  }
+    max-width: 1000px;
+}
+
+.pie {
+    max-width: 600px;
+}
