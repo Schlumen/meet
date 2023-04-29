@@ -1,4 +1,5 @@
 # Meet App
+![Screenshot](screenshot.png)
 This app will allow users to search for a city and get a list of events hosted in that city.
 This app was developed to build a serverless, progressive web application (PWA) with React using a
 test-driven development (TDD) technique. The application uses the Google Calendar API to fetch upcoming events.
@@ -9,6 +10,8 @@ This app uses a serverless function deployed on Amazon AWS Lambda to authorize (
 - JavaScript
 - HTML
 - CSS
+## Used technologies
+The Meet App is hosted on GitHub Pages and can be found [here](https://schlumen.github.io/meet/).
 # User Stories
 ## Feature 1: Filter Events by City
 - As a user

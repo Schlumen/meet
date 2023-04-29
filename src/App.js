@@ -8,6 +8,7 @@ import WelcomeScreen from "./WelcomeScreen"
 import "./nprogress.css";
 import "./App.css";
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import EventGenre from "./EventGenre";
 
 class App extends Component {
     state = {
@@ -75,23 +76,25 @@ class App extends Component {
 
                 {!navigator.onLine ? <WarningAlert text={"You are offline, the displayed list has been loaded from the cache"} /> : null}
 
-                <h4>Events in each city</h4>
-                <ResponsiveContainer height={400}>
-                    <ScatterChart
-                        margin={{
-                            top: 20,
-                            right: 20,
-                            bottom: 10,
-                            left: 10,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="city" type="category" name="city" />
-                        <YAxis dataKey="number" type="number" name="number of events" allowDecimals={false} />
-                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                        <Scatter data={this.getData()} fill="#8884d8" />
-                    </ScatterChart>
-                </ResponsiveContainer>
+                <div className="data-vis-wrapper">
+                    <EventGenre events={this.state.events} />
+                    <ResponsiveContainer height={400}>
+                        <ScatterChart
+                            margin={{
+                                top: 20,
+                                right: 20,
+                                bottom: 10,
+                                left: 10,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="city" type="category" name="city" />
+                            <YAxis dataKey="number" type="number" name="number of events" allowDecimals={false} />
+                            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                            <Scatter data={this.getData()} fill="#8884d8" />
+                        </ScatterChart>
+                    </ResponsiveContainer>
+                </div>
 
                 <EventList events={this.state.events} />
 
