@@ -100,6 +100,6 @@ input[type="number"] {
     flex-direction: row;
 }
 
-.data-vis-wrapper div:nth-child(2) {
+.scatter {
     flex-grow: 1;
   }
